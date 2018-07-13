@@ -24,7 +24,7 @@ contract CrypteriumWars is ERC721, Ownable {
     // Variables
     //--------------------------------------------------------------------------
     uint constant harvestCooldownTime = 1 days;
-    uint constant crypteriumPrice = 0.001 ether;
+    uint constant crypteriumPrice = 0.0001 ether;
 
     uint constant attackCooldownTime = 1 days;
     uint constant defenderAdvantage = 30;
@@ -82,6 +82,32 @@ contract CrypteriumWars is ERC721, Ownable {
     modifier canHarvest() {
         require(commanders[addressToCommander[msg.sender] - 1].harvestReadyTime <= now);
         _;
+    }
+
+    //--------------------------------------------------------------------------
+    // Getter
+    //--------------------------------------------------------------------------
+    function getCommanderName(uint _id) external view returns (string) {
+        return commanders[_id].name;
+    }
+
+    function getCommanderDetails(uint _id) external view returns (
+        address, uint, uint, uint, uint, uint, uint
+        ) {
+        return (
+            commanders[_id].owner,commanders[_id].crypterium,
+            commanders[_id].harvestReadyTime, commanders[_id].infantryCount,
+            commanders[_id].vehicleCount, commanders[_id].aircraftCount,
+            commanders[_id].attackReadyTime
+            );
+    }
+
+    function getCommanderCount() external view returns (uint) {
+        return commanders.length;
+    }
+
+    function getCommanderId(address _address) external view returns (uint) {
+        return addressToCommander[_address];
     }
 
     //--------------------------------------------------------------------------
