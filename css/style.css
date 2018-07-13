@@ -1,0 +1,97 @@
+body {
+    background-color: midnightblue;
+    color: darksalmon;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    text-align: center;
+}
+
+#heading {
+    font-size: 50px;
+    margin-bottom: 50px;
+}
+
+#commander-creation-box {
+    width: 600px;
+    float: left;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#mycommander-text {
+    text-decoration: underline;
+    float: left;
+    font-size: 28px;
+    visibility: hidden;
+}
+
+#no-commander {
+    font-size: 24px;
+}
+
+#create-commander-result {
+    font-size: 24px;
+}
+
+#actions-box {
+    width: 600px;
+    float: left;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#harvest {
+    width: 290px;
+}
+
+#attack-address {
+    width: 230px;
+}
+
+#harvesting {
+    visibility: hidden;
+}
+
+#buy-successfull {
+    visibility: hidden;
+}
+
+#producing-infantry {
+    visibility: hidden;
+}
+
+#producing-vehicle {
+    visibility: hidden;
+}
+
+#producing-aircraft {
+    visibility: hidden;
+}
+
+#attack-address {
+    width: 165px;
+}
+
+#attack-amount {
+    width:65px;
+}
+
+#attack-successfull {
+    visibility: hidden;
+}
+
+#list-commanders-box {
+    width: 600px;
+    float: left;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#commander-list-text {
+    font-size: 28px;
+}

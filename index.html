@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Crypterium Wars</title>
+        <script type="text/javascript" src="https://unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
+        <script type="text/javascript" src="https://unpkg.com/web3@0.20.5/dist/web3.min.js"></script>
+        <script type="text/javascript" src="js/crypteriumwars_abi.js"></script>
+        <script type="text/javascript" src="js/logic.js"></script>
+        <link  rel="stylesheet" href="css/style.css"></link>
+    </head>
+    <body>
+        <h1 id="heading">Crypterium Wars</h1>
+        <div id="commander-creation-box">
+          <span id="mycommander-text">My Commander</span>
+          <br/>
+          <p id="no-commander">You don't have a Commander!</p>
+          <div id="mycommander"></div>
+          <input type="text" placeholder="Name" id="commander-name"/>
+          <button id="create-commander">Create Commander</button>
+          <span id="create-commander-result"></span>
+        </div>
+        <div id="actions-box">
+            <button id="harvest">Harvest Crypterium</button>
+            <span id="harvesting">Harvesting Crypterium...</span>
+            <br/><br/>
+            <input type="text" placeholder="Amount" id="buy-amount"/>
+            <button id="buy">Buy Crypterium</button>
+            <span id="buy-successfull">Buying Crypterium...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <br/><br/>
+            <input type="text" placeholder="Amount" id="infantry-amount"/>
+            <button id="infantry">Produce Infantry</button>
+            <span id="producing-infantry">Producing Infantry...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <br/><br/>
+            <input type="text" placeholder="Amount" id="vehicle-amount"/>
+            <button id="vehicle">Produce Vehicle</button>
+            <span id="producing-vehicle">Producing Vehicle...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <br/><br/>
+            <input type="text" placeholder="Amount" id="aircraft-amount"/>
+            <button id="aircraft">Produce Aircraft</button>
+            <span id="producing-aircraft">Producing Aircraft...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <br/><br/>
+            <input type="text" placeholder="Address" id="attack-address"/>
+            <input type="text" placeholder="Amount" id="attack-amount"/>
+            <button id="attack">Attack</button>
+            <span id="attack-successfull">Attack launched...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+
+        </div>
+        <div id="list-commanders-box">
+            <p id="commander-list-text">List of Commanders</p>
+            <div id="allcommanders"></div>
+        </div>
+
+
+    </body>
+</html>
