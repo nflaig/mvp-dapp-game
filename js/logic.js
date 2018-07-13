@@ -1,7 +1,7 @@
 if(typeof(Contracts)==="undefined") var Contracts={};
 (function(module, Contracts) {
     var data={
-        address: "0x40c5074574130804f4859bb7250936380739b609",
+        address: "0x0a0e0ec98a6aae0c7a14fbee3a5f7bdd0512a8ff",
         network: "rinkeby",
         endpoint: "https://rinkeby.infura.io/",
         abi: crypteriumWarsABI
