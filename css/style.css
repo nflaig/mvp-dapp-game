@@ -10,7 +10,7 @@ body {
     margin-bottom: 50px;
 }
 
-#commander-creation-box {
+.main-div {
     width: 600px;
     float: left;
     padding-left: 10px;
@@ -23,75 +23,82 @@ body {
     text-decoration: underline;
     float: left;
     font-size: 28px;
-    visibility: hidden;
+    padding-left: 150px;
+    display: none;
+}
+
+#mycommander {
+    text-align: left;
+    padding-left: 150px;
 }
 
 #no-commander {
+    display: none;
     font-size: 24px;
+}
+
+#commander-name {
+    display: none;
+}
+
+#create-commander {
+    display: none;
 }
 
 #create-commander-result {
+    display: none;
     font-size: 24px;
 }
 
-#actions-box {
-    width: 600px;
-    float: left;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
 #harvest {
-    width: 290px;
+    width: 315px;
 }
 
-#attack-address {
-    width: 230px;
+.input1 {
+    width: 185px;
+}
+
+.btn1 {
+    width: 120px;
 }
 
 #harvesting {
-    visibility: hidden;
+    display: none;
 }
 
 #buy-successfull {
-    visibility: hidden;
+    display: none;
 }
 
 #producing-infantry {
-    visibility: hidden;
+    display: none;
 }
 
 #producing-vehicle {
-    visibility: hidden;
+    display: none;
 }
 
 #producing-aircraft {
-    visibility: hidden;
+    display: none;
 }
 
 #attack-address {
-    width: 165px;
+    width: 200px;
 }
 
 #attack-amount {
-    width:65px;
+    width:50px;
 }
 
-#attack-successfull {
-    visibility: hidden;
+#attack {
+    width:50px;
 }
 
-#list-commanders-box {
-    width: 600px;
-    float: left;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+#attack-launched {
+    display: none;
 }
 
 #commander-list-text {
     font-size: 28px;
+    margin-top: 0px;
 }
