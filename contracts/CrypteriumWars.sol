@@ -17,8 +17,20 @@ contract CrypteriumWars is ERC721, Ownable {
     event ProduceInfantry(uint _amount, address indexed _owner, uint _id);
     event ProduceVehicle(uint _amount, address indexed _owner, uint _id);
     event ProduceAircraft(uint _amount, address indexed _owner, uint _id);
-    event AttackerWon(address indexed _attacker, uint _attackMultiplier, address indexed _defender, uint _defenseMultiplier);
-    event DefenderWon(address indexed _attacker, uint _attackMultiplier, address indexed _defender, uint _defenseMultiplier);
+    event AttackerWon(
+        address indexed _attacker,
+        uint _attackMultiplier,
+        address indexed _defender,
+        uint _defenseMultiplier,
+        uint _amount
+        );
+    event DefenderWon(
+        address indexed _attacker,
+        uint _attackMultiplier,
+        address indexed _defender,
+        uint _defenseMultiplier,
+        uint _amount
+        );
 
     //--------------------------------------------------------------------------
     // Variables
@@ -207,13 +219,13 @@ contract CrypteriumWars is ERC721, Ownable {
             commander.crypterium = commander.crypterium.add(_amount);
             commander.attackReadyTime = now + attackCooldownTime;
 
-            emit AttackerWon(msg.sender, attackMultiplier, _address, defenseMultiplier);
+            emit AttackerWon(msg.sender, attackMultiplier, _address, defenseMultiplier, _amount);
         } else {
             commander.crypterium = commander.crypterium.sub(_amount);
             enemyCommander.crypterium = enemyCommander.crypterium.add(_amount);
             commander.attackReadyTime = now + attackCooldownTime;
 
-            emit DefenderWon(msg.sender, attackMultiplier, _address, defenseMultiplier);
+            emit DefenderWon(msg.sender, attackMultiplier, _address, defenseMultiplier, _amount);
         }
     }
 
@@ -243,12 +255,20 @@ contract CrypteriumWars is ERC721, Ownable {
     }
 
     function transfer(address _to, uint256 _tokenId) external hasCommander {
-        require(addressToCommander[msg.sender] == _tokenId.add(1) && msg.sender == commanders[_tokenId].owner && addressToCommander[_to] == 0);
+        require(
+            addressToCommander[msg.sender] == _tokenId.add(1) &&
+            msg.sender == commanders[_tokenId].owner &&
+            addressToCommander[_to] == 0
+            );
         _transfer(msg.sender, _to, _tokenId);
     }
 
     function approve(address _to, uint256 _tokenId) external hasCommander {
-        require(addressToCommander[msg.sender] == _tokenId.add(1) && msg.sender == commanders[_tokenId].owner && addressToCommander[_to] == 0);
+        require(
+            addressToCommander[msg.sender] == _tokenId.add(1) &&
+            msg.sender == commanders[_tokenId].owner &&
+            addressToCommander[_to] == 0
+            );
         approvals[_tokenId] = _to;
 
         emit Approval(msg.sender, _to, _tokenId);

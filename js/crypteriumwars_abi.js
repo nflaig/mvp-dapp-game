@@ -234,6 +234,11 @@ var crypteriumWarsABI = [
         "indexed": false,
         "name": "_defenseMultiplier",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "_amount",
+        "type": "uint256"
       }
     ],
     "name": "AttackerWon",
@@ -260,6 +265,11 @@ var crypteriumWarsABI = [
       {
         "indexed": false,
         "name": "_defenseMultiplier",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "_amount",
         "type": "uint256"
       }
     ],

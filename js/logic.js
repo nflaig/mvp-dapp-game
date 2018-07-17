@@ -1,41 +1,41 @@
-if(typeof(Contracts)==="undefined") var Contracts={};
+if (typeof(Contracts) === "undefined") var Contracts = {};
 (function(module, Contracts) {
-    var data={
-        address: "0x0a0e0ec98a6aae0c7a14fbee3a5f7bdd0512a8ff",
-        network: "rinkeby",
-        endpoint: "https://rinkeby.infura.io/",
+    var data = {
+        address: "0x79be2de23740b5b93a97b6807870f64699dcfff4",
+        network: "local",
+        endpoint: "http://127.0.0.1:8545/",
         abi: crypteriumWarsABI
     };
-    Contracts["CrypteriumWars"]=data;
-    module.exports=data;
-})((typeof(module)==="undefined"?{}:module), Contracts);
+    Contracts["CrypteriumWars"] = data;
+    module.exports = data;
+})((typeof(module) === "undefined" ? {} : module), Contracts);
 
-(function (Contract) {
+(function(Contract) {
     var web3_instance;
     var instance;
     var currentAccount;
 
     function init(cb) {
-        window.addEventListener('load', function () {
-          // Checking if Web3 has been injected by the browser (Mist/MetaMask)
-          if (typeof web3 !== 'undefined') {
-            // Use the browser's ethereum provider
-            web3_instance = new Web3(
-                (window.web3 && window.web3.currentProvider) ||
-                new Web3.providers.HttpProvider(Contract.endpoint));
+        window.addEventListener('load', function() {
+            // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+            if (typeof web3 !== 'undefined') {
+                // Use the browser's ethereum provider
+                web3_instance = new Web3(
+                    (window.web3 && window.web3.currentProvider) ||
+                    new Web3.providers.HttpProvider(Contract.endpoint));
 
-            var contract_interface = web3_instance.eth.contract(Contract.abi);
-            instance = contract_interface.at(Contract.address);
-            cb();
-          } else {
-              alert("No Web3? You should consider trying MetaMask!");
-              window.location.reload();
-          }
+                var contract_interface = web3_instance.eth.contract(Contract.abi);
+                instance = contract_interface.at(Contract.address);
+                cb();
+            } else {
+                alert("No Web3? You should consider trying MetaMask!");
+                window.location.reload();
+            }
         });
     }
 
     function checkAccount() {
-        setInterval(function () {
+        setInterval(function() {
             web3.eth.getAccounts(function(error, accounts) {
                 if (error) {
                     console.log(error);
@@ -58,21 +58,21 @@ if(typeof(Contracts)==="undefined") var Contracts={};
                 console.log(error);
             } else {
                 if (accounts.length != 0) {
-                    instance.getCommanderId(accounts[0], function (error, result) {
+                    instance.getCommanderId(accounts[0], function(error, result) {
                         if (error) {
                             console.log(error);
                         } else {
                             if (result > 0) {
                                 let commanderId = result - 1;
                                 let commanderName;
-                                instance.getCommanderName(commanderId, function (error, result) {
+                                instance.getCommanderName(commanderId, function(error, result) {
                                     if (error) {
                                         alert(error);
                                     } else {
                                         commanderName = result;
                                     }
                                 });
-                                instance.getCommanderDetails(commanderId, function (error, result) {
+                                instance.getCommanderDetails(commanderId, function(error, result) {
                                     if (error) {
                                         console.log(error);
                                     } else {
@@ -116,21 +116,21 @@ if(typeof(Contracts)==="undefined") var Contracts={};
 
     function displayAllCommanders() {
         $("#allcommanders").empty();
-        instance.getCommanderCount(function (error, result) {
+        instance.getCommanderCount(function(error, result) {
             if (error) {
                 console.log(error);
             } else {
                 let commanderCount = result;
                 for (var commanderId = 0; commanderId < commanderCount; commanderId++) {
                     let commanderName;
-                    instance.getCommanderName(commanderId, function (error, result) {
+                    instance.getCommanderName(commanderId, function(error, result) {
                         if (error) {
                             console.log(error);
                         } else {
                             commanderName = result;
                         }
                     });
-                    instance.getCommanderDetails(commanderId, function (error, result) {
+                    instance.getCommanderDetails(commanderId, function(error, result) {
                         if (error) {
                             console.log(error);
                         } else {
@@ -161,13 +161,13 @@ if(typeof(Contracts)==="undefined") var Contracts={};
     }
 
     function waitForReceipt(txHash, cb) {
-        web3_instance.eth.getTransactionReceipt(txHash, function (error, receipt) {
+        web3_instance.eth.getTransactionReceipt(txHash, function(error, receipt) {
             if (error) {
                 console.log(error);
             } else if (receipt != null) {
                 cb(receipt);
             } else {
-                window.setTimeout(function () {
+                window.setTimeout(function() {
                     waitForReceipt(txHash, cb);
                 }, 1000);
             }
@@ -177,7 +177,10 @@ if(typeof(Contracts)==="undefined") var Contracts={};
     function createCommander() {
         let name = $("#commander-name").val();
         if (name) {
-            instance.createCommander.sendTransaction(name, {from: web3.eth.accounts[0], gas: 3000000}, function(error, txHash) {
+            instance.createCommander.sendTransaction(name, {
+                from: currentAccount,
+                gas: 3000000
+            }, function(error, txHash) {
                 if (error) {
                     console.log(error);
                 } else {
@@ -185,8 +188,8 @@ if(typeof(Contracts)==="undefined") var Contracts={};
                     $("#commander-name").css("display", "none");
                     $("#create-commander").css("display", "none");
                     $("#create-commander-result").css("display", "inline");
-                    waitForReceipt(txHash, function (receipt) {
-                        if (receipt.status === "0x1")  {
+                    waitForReceipt(txHash, function(receipt) {
+                        if (receipt.status === "0x1") {
                             $("#commander-name").val("");
                             $("#create-commander-result").css("display", "none");
                             displayMyCommander();
@@ -207,14 +210,17 @@ if(typeof(Contracts)==="undefined") var Contracts={};
     }
 
     function harvestCrypterium() {
-        instance.harvestCrypterium.sendTransaction({from: web3.eth.accounts[0], gas: 3000000}, function(error, txHash) {
+        instance.harvestCrypterium.sendTransaction({
+            from: currentAccount,
+            gas: 3000000
+        }, function(error, txHash) {
             if (error) {
                 console.log(error);
             } else {
                 $("#harvest").css("display", "none");
                 $("#harvesting").css("display", "inline");
-                waitForReceipt(txHash, function (receipt) {
-                    if (receipt.status === "0x1")  {
+                waitForReceipt(txHash, function(receipt) {
+                    if (receipt.status === "0x1") {
                         $("#harvesting").css("display", "none");
                         $("#harvest").css("display", "inline");
                         alert("Harvesting was successfull!");
@@ -234,15 +240,19 @@ if(typeof(Contracts)==="undefined") var Contracts={};
         let amount = parseInt($("#buy-amount").val())
         let val = amount * 100000000000000;
         if (amount && amount > 0) {
-            instance.buyCrypterium.sendTransaction(amount, {from: web3.eth.accounts[0], gas: 3000000, value: val}, function(error, txHash) {
+            instance.buyCrypterium.sendTransaction(amount, {
+                from: currentAccount,
+                gas: 3000000,
+                value: val
+            }, function(error, txHash) {
                 if (error) {
                     console.log(error);
                 } else {
                     $("#buy-amount").css("display", "none");
                     $("#buy").css("display", "none");
                     $("#buy-successfull").css("display", "inline");
-                    waitForReceipt(txHash, function (receipt) {
-                        if (receipt.status === "0x1")  {
+                    waitForReceipt(txHash, function(receipt) {
+                        if (receipt.status === "0x1") {
                             $("#buy-amount").val("");
                             $("#buy-successfull").css("display", "none");
                             $("#buy-amount").css("display", "inline");
@@ -268,14 +278,17 @@ if(typeof(Contracts)==="undefined") var Contracts={};
     function produceInfantry() {
         let amount = parseInt($("#infantry-amount").val())
         if (amount && amount > 0) {
-            instance.produceInfantry.sendTransaction(amount, {from: web3.eth.accounts[0], gas: 3000000}, function(error, txHash) {
+            instance.produceInfantry.sendTransaction(amount, {
+                from: currentAccount,
+                gas: 3000000
+            }, function(error, txHash) {
                 if (error) {
                     console.log(error);
                 } else {
                     $("#infantry-amount").css("display", "none");
                     $("#infantry").css("display", "none");
                     $("#producing-infantry").css("display", "inline");
-                    waitForReceipt(txHash, function (receipt) {
+                    waitForReceipt(txHash, function(receipt) {
                         if (receipt.status === "0x1") {
                             $("#infantry-amount").val("");
                             $("#producing-infantry").css("display", "none");
@@ -302,14 +315,17 @@ if(typeof(Contracts)==="undefined") var Contracts={};
     function produceVehicle() {
         let amount = parseInt($("#vehicle-amount").val())
         if (amount && amount > 0) {
-            instance.produceVehicle.sendTransaction(amount, {from: web3.eth.accounts[0], gas: 3000000}, function(error, txHash) {
+            instance.produceVehicle.sendTransaction(amount, {
+                from: currentAccount,
+                gas: 3000000
+            }, function(error, txHash) {
                 if (error) {
                     console.log(error);
                 } else {
                     $("#vehicle-amount").css("display", "none");
                     $("#vehicle").css("display", "none");
                     $("#producing-vehicle").css("display", "inline");
-                    waitForReceipt(txHash, function (receipt) {
+                    waitForReceipt(txHash, function(receipt) {
                         if (receipt.status === "0x1") {
                             $("#vehicle-amount").val("");
                             $("#producing-vehicle").css("display", "none");
@@ -336,14 +352,17 @@ if(typeof(Contracts)==="undefined") var Contracts={};
     function produceAircraft() {
         let amount = parseInt($("#aircraft-amount").val())
         if (amount && amount > 0) {
-            instance.produceAircraft.sendTransaction(amount, {from: web3.eth.accounts[0], gas: 3000000}, function(error, txHash) {
+            instance.produceAircraft.sendTransaction(amount, {
+                from: currentAccount,
+                gas: 3000000
+            }, function(error, txHash) {
                 if (error) {
                     console.log(error);
                 } else {
                     $("#aircraft-amount").css("display", "none");
                     $("#aircraft").css("display", "none");
                     $("#producing-aircraft").css("display", "inline");
-                    waitForReceipt(txHash, function (receipt) {
+                    waitForReceipt(txHash, function(receipt) {
                         if (receipt.status === "0x1") {
                             $("#aircraft-amount").val("");
                             $("#producing-aircraft").css("display", "none");
@@ -371,7 +390,10 @@ if(typeof(Contracts)==="undefined") var Contracts={};
         let address = $("#attack-address").val();
         let amount = parseInt($("#attack-amount").val())
         if (address && amount && amount > 0) {
-            instance.attack.sendTransaction(address, amount, {from: web3.eth.accounts[0], gas: 3000000}, function(error, txHash) {
+            instance.attack.sendTransaction(address, amount, {
+                from: currentAccount,
+                gas: 3000000
+            }, function(error, txHash) {
                 if (error) {
                     console.log(error);
                 } else {
@@ -379,17 +401,19 @@ if(typeof(Contracts)==="undefined") var Contracts={};
                     $("#attack-amount").css("display", "none");
                     $("#attack").css("display", "none");
                     $("#attack-launched").css("display", "inline");
-                    waitForReceipt(txHash, function (receipt) {
+                    waitForReceipt(txHash, function(receipt) {
                         if (receipt.status === "0x1") {
-                            $("#attack-address").val("");
-                            $("#attack-amount").val("");
-                            $("#attack-launched").css("display", "none");
-                            $("#attack-address").css("display", "inline");
-                            $("#attack-amount").css("display", "inline");
-                            $("#attack").css("display", "inline");
-                            alert("Battle for " + amount + " Crypterium has finished!");
-                            displayMyCommander();
-                            displayAllCommanders();
+                            setTimeout(function() {
+                                $("#attack-address").val("");
+                                $("#attack-amount").val("");
+                                $("#attack-launched").css("display", "none");
+                                $("#attack-address").css("display", "inline");
+                                $("#attack-amount").css("display", "inline");
+                                $("#attack").css("display", "inline");
+                                displayMyCommander();
+                                displayAllCommanders();
+                                getLastAttackResult(currentAccount, amount);
+                            }, 30000);
                         } else {
                             $("#attack-address").val("");
                             $("#attack-amount").val("");
@@ -407,31 +431,73 @@ if(typeof(Contracts)==="undefined") var Contracts={};
         }
     }
 
-    $(document).ready(function () {
-        init(function () {
+    function getLastAttackResult(attacker, amount) {
+        web3.eth.getBlockNumber(function(error, latestBlock) {
+            if (error) {
+                console.log(error);
+            } else {
+                let fromBlockNumber;
+                if (latestBlock - 100 < 0) {
+                    fromBlockNumber = 0;
+                } else {
+                    fromBlockNumber = latestBlock - 100;
+                }
+                let attackerWon = instance.AttackerWon({
+                    '_attacker': attacker
+                }, {
+                    fromBlock: fromBlockNumber,
+                    toBlock: latestBlock
+                });
+                attackerWon.watch(function(error, result) {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        alert("You won the Battle and gained " + amount + " Crypterium!");
+                    }
+                });
+
+                let defenderWon = instance.DefenderWon({
+                    '_attacker': attacker
+                }, {
+                    fromBlock: fromBlockNumber,
+                    toBlock: latestBlock
+                });
+                defenderWon.watch(function(error, result) {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        alert("The Defender won the Battle! You lost " + amount + " Crypterium!");
+                    }
+                });
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        init(function() {
             checkAccount();
             displayMyCommander();
             displayAllCommanders();
         });
-        $("#create-commander").click(function () {
+        $("#create-commander").click(function() {
             createCommander();
         });
-        $("#harvest").click(function () {
+        $("#harvest").click(function() {
             harvestCrypterium();
         });
-        $("#buy").click(function () {
+        $("#buy").click(function() {
             buyCrypterium();
         });
-        $("#infantry").click(function () {
+        $("#infantry").click(function() {
             produceInfantry();
         });
-        $("#vehicle").click(function () {
+        $("#vehicle").click(function() {
             produceVehicle();
         });
-        $("#aircraft").click(function () {
+        $("#aircraft").click(function() {
             produceAircraft();
         });
-        $("#attack").click(function () {
+        $("#attack").click(function() {
             attack();
         });
     });
