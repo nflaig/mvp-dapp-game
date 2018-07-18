@@ -1,7 +1,7 @@
 if (typeof(Contracts) === "undefined") var Contracts = {};
 (function(module, Contracts) {
     var data = {
-        address: "0x79be2de23740b5b93a97b6807870f64699dcfff4",
+        address: "YOUR_CONTRACT_ADDRESS",
         network: "local",
         endpoint: "http://127.0.0.1:8545/",
         abi: crypteriumWarsABI
@@ -67,7 +67,7 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
                                 let commanderName;
                                 instance.getCommanderName(commanderId, function(error, result) {
                                     if (error) {
-                                        alert(error);
+                                        console.log(error);
                                     } else {
                                         commanderName = result;
                                     }
