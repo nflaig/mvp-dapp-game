@@ -81,7 +81,7 @@ truffle migrate
 #### Change the contract address
 
 In order to use the front-end with your deployed contract you need to set the CrypteriumWars contract address in
-[js/logic.js](https://github.com/nflaig/mvp-dapp-game/blob/master/js/logic.js#L4).
+[scripts/logic.js](https://github.com/nflaig/mvp-dapp-game/blob/master/scripts/logic.js#L4).
 
 #### Run local HTTP server
 
