@@ -1,0 +1,26 @@
+{
+  "name": "mvp-dapp-game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "truffle.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nflaig/mvp-dapp-game.git"
+  },
+  "keywords": [],
+  "author": "Nico Flaig <nflaig@protonmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nflaig/mvp-dapp-game/issues"
+  },
+  "homepage": "https://github.com/nflaig/mvp-dapp-game#readme",
+  "dependencies": {
+    "truffle-hdwallet-provider": "0.0.5"
+  }
+}
