@@ -36,68 +36,79 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
 
     function checkAccount() {
         setInterval(function() {
-            web3.eth.getAccounts(function(error, accounts) {
+            window.web3.eth.getAccounts(function(error, accounts) {
                 if (error) {
-                    console.log(error);
+                    alert(error);
                 } else {
                     if (accounts.length == 0) {
                         alert("Please unlock your MetaMask Accounts!");
-                        checkAccount();
                     } else if (accounts[0] !== currentAccount) {
                         currentAccount = accounts[0];
                         displayMyCommander();
+                        displayMission();
                     }
                 }
             });
-        }, 500);
+        }, 250);
     }
 
     function displayMyCommander() {
-        web3.eth.getAccounts(function(error, accounts) {
+        window.web3.eth.getAccounts(function(error, accounts) {
             if (error) {
-                console.log(error);
+                alert(error);
             } else {
                 if (accounts.length != 0) {
                     instance.getCommanderId(accounts[0], function(error, result) {
                         if (error) {
-                            console.log(error);
+                            alert(error);
                         } else {
                             if (result > 0) {
                                 let commanderId = result - 1;
                                 let commanderName;
                                 instance.getCommanderName(commanderId, function(error, result) {
                                     if (error) {
-                                        console.log(error);
+                                        alert(error);
                                     } else {
                                         commanderName = result;
                                     }
                                 });
+                                let missionReadyTime;
+                                instance.getMissionDetails(commanderId, function(error, result) {
+                                    if (error) {
+                                        alert(error);
+                                    } else {
+                                        missionReadyTime = result[1];
+                                    }
+                                });
                                 instance.getCommanderDetails(commanderId, function(error, result) {
                                     if (error) {
-                                        console.log(error);
+                                        alert(error);
                                     } else {
-                                        $("#mycommander").empty();
-                                        $("#no-commander").css("display", "none");
-                                        $("#commander-name").css("display", "none");
-                                        $("#create-commander").css("display", "none");
-                                        $("#mycommander-text").css("display", "inline");
-                                        $("#mycommander").append(
-                                            `<span>Name: ${commanderName}</span>
-                                            <br/>
-                                            <span>Owner: ${result[0]}</span>
-                                            <br/>
-                                            <span>Crypterium: ${result[1]}</span>
-                                            <br/>
-                                            <span>HarvestReadyTime: ${result[2]}</span>
-                                            <br/>
-                                            <span>InfantryCount: ${result[3]}</span>
-                                            <br/>
-                                            <span>VehicleCount: ${result[4]}</span>
-                                            <br/>
-                                            <span>AircraftCount: ${result[5]}</span>
-                                            <br/>
-                                            <span>AttackReadyTime: ${result[6]}</span>`
-                                        );
+                                        setTimeout(function() {
+                                            $("#mycommander").empty();
+                                            $("#no-commander").css("display", "none");
+                                            $("#commander-name").css("display", "none");
+                                            $("#create-commander").css("display", "none");
+                                            $("#mycommander-name").html("Commander " + commanderName);
+                                            $("#mycommander-name").css("display", "inline");
+                                            $("#mycommander").append(
+                                                `<span>Owner: ${result[0]}</span>
+                                                <br/>
+                                                <span>Crypterium: ${result[1]}</span>
+                                                <br/>
+                                                <span>Next harvest: ${timeConverter(result[2])}</span>
+                                                <br/>
+                                                <span>Infantry units: ${result[3]}</span>
+                                                <br/>
+                                                <span>Vehicle units: ${result[4]}</span>
+                                                <br/>
+                                                <span>Aircraft units: ${result[5]}</span>
+                                                <br/>
+                                                <span>Next attack: ${timeConverter(result[6])}</span>
+                                                <br/>
+                                                <span>Next mission: ${timeConverter(missionReadyTime)}</span>`
+                                            );
+                                        }, 100);
                                     }
                                 });
                             } else {
@@ -105,7 +116,7 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
                                 $("#no-commander").css("display", "block");
                                 $("#commander-name").css("display", "inline");
                                 $("#create-commander").css("display", "inline");
-                                $("#mycommander-text").css("display", "none");
+                                $("#mycommander-name").css("display", "none");
                             }
                         }
                     });
@@ -118,41 +129,53 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
         $("#allcommanders").empty();
         instance.getCommanderCount(function(error, result) {
             if (error) {
-                console.log(error);
+                alert(error);
             } else {
                 let commanderCount = result;
                 for (var commanderId = 0; commanderId < commanderCount; commanderId++) {
                     let commanderName;
                     instance.getCommanderName(commanderId, function(error, result) {
                         if (error) {
-                            console.log(error);
+                            alert(error);
                         } else {
                             commanderName = result;
                         }
                     });
+                    let missionReadyTime;
+                    instance.getMissionDetails(commanderId, function(error, result) {
+                        if (error) {
+                            alert(error);
+                        } else {
+                            missionReadyTime = result[1];
+                        }
+                    });
                     instance.getCommanderDetails(commanderId, function(error, result) {
                         if (error) {
-                            console.log(error);
+                            alert(error);
                         } else {
-                            $("#allcommanders").append(
-                                `<div style="text-align: left; border:1px solid black; margin-bottom: 15px;">
-                                    <span>Name: ${commanderName}</span>
-                                    <br/>
-                                    <span>Owner: ${result[0]}</span>
-                                    <br/>
-                                    <span>Crypterium: ${result[1]}</span>
-                                    <br/>
-                                    <span>HarvestReadyTime: ${result[2]}</span>
-                                    <br/>
-                                    <span>InfantryCount: ${result[3]}</span>
-                                    <br/>
-                                    <span>VehicleCount: ${result[4]}</span>
-                                    <br/>
-                                    <span>AircraftCount: ${result[5]}</span>
-                                    <br/>
-                                    <span>AttackReadyTime: ${result[6]}</span>
-                                </div>`
-                            );
+                            setTimeout(function() {
+                                $("#allcommanders").append(
+                                    `<div class="allcommanders-commander">
+                                        <span>Commander ${commanderName}</span>
+                                        <br/>
+                                        <span>Owner: ${result[0]}</span>
+                                        <br/>
+                                        <span>Crypterium: ${result[1]}</span>
+                                        <br/>
+                                        <span>Next harvest: ${timeConverter(result[2])}</span>
+                                        <br/>
+                                        <span>Infantry units: ${result[3]}</span>
+                                        <br/>
+                                        <span>Vehicle units: ${result[4]}</span>
+                                        <br/>
+                                        <span>Aircraft units: ${result[5]}</span>
+                                        <br/>
+                                        <span>Next attack: ${timeConverter(result[6])}</span>
+                                        <br/>
+                                        <span>Next mission: ${timeConverter(missionReadyTime)}</span>
+                                    </div>`
+                                );
+                            }, 100);
                         }
                     });
                 }
@@ -160,16 +183,31 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
         });
     }
 
-    function waitForReceipt(txHash, cb) {
-        web3_instance.eth.getTransactionReceipt(txHash, function(error, receipt) {
+    function displayMission() {
+        window.web3.eth.getAccounts(function(error, accounts) {
             if (error) {
-                console.log(error);
-            } else if (receipt != null) {
-                cb(receipt);
+                alert(error);
             } else {
-                window.setTimeout(function() {
-                    waitForReceipt(txHash, cb);
-                }, 1000);
+                if (accounts.length != 0) {
+                    instance.getCommanderId(accounts[0], function(error, result) {
+                        if (error) {
+                            alert(error);
+                        } else {
+                            if (result > 0) {
+                                let commanderId = result - 1;
+                                instance.getMissionDetails(commanderId, function(error, result) {
+                                    if (error) {
+                                        alert(error);
+                                    } else {
+                                        $("#start-mission").html("Start Mission " + result[0]);
+                                    }
+                                });
+                            } else {
+                                $("#start-mission").html("Start Mission");
+                            }
+                        }
+                    });
+                }
             }
         });
     }
@@ -178,11 +216,10 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
         let name = $("#commander-name").val();
         if (name) {
             instance.createCommander.sendTransaction(name, {
-                from: currentAccount,
-                gas: 3000000
+                from: currentAccount
             }, function(error, txHash) {
                 if (error) {
-                    console.log(error);
+                    alert(error);
                 } else {
                     $("#no-commander").css("display", "none");
                     $("#commander-name").css("display", "none");
@@ -199,7 +236,7 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
                             $("#no-commander").css("display", "block");
                             $("#commander-name").css("display", "inline");
                             $("#create-commander").css("display", "inline");
-                            alert("Receipt status fail!");
+                            alert("Receipt status error!");
                         }
                     });
                 }
@@ -211,11 +248,10 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
 
     function harvestCrypterium() {
         instance.harvestCrypterium.sendTransaction({
-            from: currentAccount,
-            gas: 3000000
+            from: currentAccount
         }, function(error, txHash) {
             if (error) {
-                console.log(error);
+                alert(error);
             } else {
                 $("#harvest").css("display", "none");
                 $("#harvesting").css("display", "inline");
@@ -229,7 +265,7 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
                     } else {
                         $("#harvesting").css("display", "none");
                         $("#harvest").css("display", "inline");
-                        alert("Receipt status fail!");
+                        alert("Receipt status error!");
                     }
                 });
             }
@@ -238,15 +274,14 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
 
     function buyCrypterium() {
         let amount = parseInt($("#buy-amount").val())
-        let val = amount * 100000000000000;
+        let val = amount * 1000000000000000;
         if (amount && amount > 0) {
             instance.buyCrypterium.sendTransaction(amount, {
                 from: currentAccount,
-                gas: 3000000,
                 value: val
             }, function(error, txHash) {
                 if (error) {
-                    console.log(error);
+                    alert(error);
                 } else {
                     $("#buy-amount").css("display", "none");
                     $("#buy").css("display", "none");
@@ -265,7 +300,7 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
                             $("#buy-successfull").css("display", "none");
                             $("#buy-amount").css("display", "inline");
                             $("#buy").css("display", "inline");
-                            alert("Receipt status fail!");
+                            alert("Receipt status error!");
                         }
                     });
                 }
@@ -279,11 +314,10 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
         let amount = parseInt($("#infantry-amount").val())
         if (amount && amount > 0) {
             instance.produceInfantry.sendTransaction(amount, {
-                from: currentAccount,
-                gas: 3000000
+                from: currentAccount
             }, function(error, txHash) {
                 if (error) {
-                    console.log(error);
+                    alert(error);
                 } else {
                     $("#infantry-amount").css("display", "none");
                     $("#infantry").css("display", "none");
@@ -302,7 +336,7 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
                             $("#producing-infantry").css("display", "none");
                             $("#infantry-amount").css("display", "inline");
                             $("#infantry").css("display", "inline");
-                            alert("Receipt status fail!");
+                            alert("Receipt status error!");
                         }
                     });
                 }
@@ -316,11 +350,10 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
         let amount = parseInt($("#vehicle-amount").val())
         if (amount && amount > 0) {
             instance.produceVehicle.sendTransaction(amount, {
-                from: currentAccount,
-                gas: 3000000
+                from: currentAccount
             }, function(error, txHash) {
                 if (error) {
-                    console.log(error);
+                    alert(error);
                 } else {
                     $("#vehicle-amount").css("display", "none");
                     $("#vehicle").css("display", "none");
@@ -339,7 +372,7 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
                             $("#producing-vehicle").css("display", "none");
                             $("#vehicle-amount").css("display", "inline");
                             $("#vehicle").css("display", "inline");
-                            alert("Receipt status fail!");
+                            alert("Receipt status error!");
                         }
                     });
                 }
@@ -353,11 +386,10 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
         let amount = parseInt($("#aircraft-amount").val())
         if (amount && amount > 0) {
             instance.produceAircraft.sendTransaction(amount, {
-                from: currentAccount,
-                gas: 3000000
+                from: currentAccount
             }, function(error, txHash) {
                 if (error) {
-                    console.log(error);
+                    alert(error);
                 } else {
                     $("#aircraft-amount").css("display", "none");
                     $("#aircraft").css("display", "none");
@@ -376,7 +408,7 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
                             $("#producing-aircraft").css("display", "none");
                             $("#aircraft-amount").css("display", "inline");
                             $("#aircraft").css("display", "inline");
-                            alert("Receipt status fail!");
+                            alert("Receipt status error!");
                         }
                     });
                 }
@@ -391,11 +423,10 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
         let amount = parseInt($("#attack-amount").val())
         if (address && amount && amount > 0) {
             instance.attack.sendTransaction(address, amount, {
-                from: currentAccount,
-                gas: 3000000
+                from: currentAccount
             }, function(error, txHash) {
                 if (error) {
-                    console.log(error);
+                    alert(error);
                 } else {
                     $("#attack-address").css("display", "none");
                     $("#attack-amount").css("display", "none");
@@ -403,17 +434,7 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
                     $("#attack-launched").css("display", "inline");
                     waitForReceipt(txHash, function(receipt) {
                         if (receipt.status === "0x1") {
-                            setTimeout(function() {
-                                $("#attack-address").val("");
-                                $("#attack-amount").val("");
-                                $("#attack-launched").css("display", "none");
-                                $("#attack-address").css("display", "inline");
-                                $("#attack-amount").css("display", "inline");
-                                $("#attack").css("display", "inline");
-                                displayMyCommander();
-                                displayAllCommanders();
-                                getLastAttackResult(currentAccount, amount);
-                            }, 30000);
+                            getLastAttackResult(currentAccount, amount);
                         } else {
                             $("#attack-address").val("");
                             $("#attack-amount").val("");
@@ -421,7 +442,7 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
                             $("#attack-address").css("display", "inline");
                             $("#attack-amount").css("display", "inline");
                             $("#attack").css("display", "inline");
-                            alert("Receipt status fail!");
+                            alert("Receipt status error!");
                         }
                     });
                 }
@@ -432,45 +453,213 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
     }
 
     function getLastAttackResult(attacker, amount) {
-        web3.eth.getBlockNumber(function(error, latestBlock) {
-            if (error) {
-                console.log(error);
-            } else {
-                let fromBlockNumber;
-                if (latestBlock - 100 < 0) {
-                    fromBlockNumber = 0;
+        let timeoutDuration = 30000;
+        if (Contract.network == "local") timeoutDuration = 3000;
+        setTimeout(function() {
+            window.web3.eth.getBlockNumber(function(error, latestBlock) {
+                if (error) {
+                    alert(error);
                 } else {
-                    fromBlockNumber = latestBlock - 100;
-                }
-                let attackerWon = instance.AttackerWon({
-                    '_attacker': attacker
-                }, {
-                    fromBlock: fromBlockNumber,
-                    toBlock: latestBlock
-                });
-                attackerWon.watch(function(error, result) {
-                    if (error) {
-                        console.log(error);
+                    let fromBlockNumber;
+                    if (latestBlock - 10 < 0) {
+                        fromBlockNumber = 0;
                     } else {
-                        alert("You won the Battle and gained " + amount + " Crypterium!");
+                        fromBlockNumber = latestBlock - 10;
                     }
-                });
+                    let attackerWon = instance.AttackerWon({
+                        '_attacker': attacker
+                    }, {
+                        fromBlock: fromBlockNumber,
+                        toBlock: latestBlock
+                    });
+                    attackerWon.watch(function(error, result) {
+                        if (error) {
+                            alert(error);
+                        } else {
+                            $("#attack-address").val("");
+                            $("#attack-amount").val("");
+                            $("#attack-launched").css("display", "none");
+                            $("#attack-address").css("display", "inline");
+                            $("#attack-amount").css("display", "inline");
+                            $("#attack").css("display", "inline");
+                            alert("You won the Battle and gained " + amount + " Crypterium!");
+                            displayMyCommander();
+                            displayAllCommanders();
+                        }
+                    });
 
-                let defenderWon = instance.DefenderWon({
-                    '_attacker': attacker
-                }, {
-                    fromBlock: fromBlockNumber,
-                    toBlock: latestBlock
-                });
-                defenderWon.watch(function(error, result) {
-                    if (error) {
-                        console.log(error);
+                    let defenderWon = instance.DefenderWon({
+                        '_attacker': attacker
+                    }, {
+                        fromBlock: fromBlockNumber,
+                        toBlock: latestBlock
+                    });
+                    defenderWon.watch(function(error, result) {
+                        if (error) {
+                            alert(error);
+                        } else {
+                            $("#attack-address").val("");
+                            $("#attack-amount").val("");
+                            $("#attack-launched").css("display", "none");
+                            $("#attack-address").css("display", "inline");
+                            $("#attack-amount").css("display", "inline");
+                            $("#attack").css("display", "inline");
+                            alert("The Defender won the Battle! You lost " + amount + " Crypterium!");
+                            displayMyCommander();
+                            displayAllCommanders();
+                        }
+                    });
+                }
+            });
+        }, timeoutDuration);
+    }
+
+    function changeCommanderName() {
+        let name = $("#new-commander-name").val();
+        if (name) {
+            instance.changeCommanderName.sendTransaction(name, {
+                from: currentAccount
+            }, function(error, txHash) {
+                if (error) {
+                    alert(error);
+                } else {
+                    $("#new-commander-name").css("display", "none");
+                    $("#change-name").css("display", "none");
+                    $("#changing-name").css("display", "inline");
+                    waitForReceipt(txHash, function(receipt) {
+                        if (receipt.status === "0x1") {
+                            $("#new-commander-name").val("");
+                            $("#changing-name").css("display", "none");
+                            $("#new-commander-name").css("display", "inline");
+                            $("#change-name").css("display", "inline");
+                            alert("Changed name of Commander to " + name);
+                            displayMyCommander();
+                            displayAllCommanders();
+                        } else {
+                            $("#new-commander-name").val("");
+                            $("#changing-name").css("display", "none");
+                            $("#new-commander-name").css("display", "inline");
+                            $("#change-name").css("display", "inline");
+                            alert("Receipt status error!");
+                        }
+                    });
+                }
+            });
+        } else {
+            alert("Please input a name!");
+        }
+    }
+
+    function startMission() {
+        instance.startMission.sendTransaction({
+            from: currentAccount
+        }, function(error, txHash) {
+            if (error) {
+                alert(error);
+            } else {
+                $("#start-mission").css("display", "none");
+                $("#started-mission").css("display", "inline");
+                waitForReceipt(txHash, function(receipt) {
+                    if (receipt.status === "0x1") {
+                        getMissionResult(currentAccount);
                     } else {
-                        alert("The Defender won the Battle! You lost " + amount + " Crypterium!");
+                        $("#started-mission").css("display", "none");
+                        $("#start-mission").css("display", "inline");
+                        alert("Receipt status error!");
                     }
                 });
             }
         });
+    }
+
+    function getMissionResult(commanderOwner) {
+        let timeoutDuration = 30000;
+        if (Contract.network == "local") timeoutDuration = 3000;
+        setTimeout(function() {
+            let missionLevel = parseInt($("#start-mission").text().slice(-1));
+            window.web3.eth.getBlockNumber(function(error, latestBlock) {
+                if (error) {
+                    alert(error);
+                } else {
+                    let fromBlockNumber;
+                    if (latestBlock - 10 < 0) {
+                        fromBlockNumber = 0;
+                    } else {
+                        fromBlockNumber = latestBlock - 10;
+                    }
+                    let missionSucceeded = instance.MissionSucceeded({
+                        '_missionLevel': missionLevel,
+                        '_owner': commanderOwner
+                    }, {
+                        fromBlock: fromBlockNumber,
+                        toBlock: latestBlock
+                    });
+                    missionSucceeded.watch(function(error, result) {
+                        if (error) {
+                            alert(error);
+                        } else {
+                            $("#started-mission").css("display", "none");
+                            $("#start-mission").css("display", "inline");
+                            alert("Mission was successfull!");
+                            displayMyCommander();
+                            displayAllCommanders();
+                            displayMission();
+                        }
+                    });
+
+                    let missionFailed = instance.MissionFailed({
+                        '_missionLevel': missionLevel,
+                        '_owner': commanderOwner
+                    }, {
+                        fromBlock: fromBlockNumber,
+                        toBlock: latestBlock
+                    });
+                    missionFailed.watch(function(error, result) {
+                        if (error) {
+                            alert(error);
+                        } else {
+                            $("#started-mission").css("display", "none");
+                            $("#start-mission").css("display", "inline");
+                            alert("Mission failed!");
+                            displayMyCommander();
+                            displayAllCommanders();
+                            displayMission();
+                        }
+                    });
+                }
+            });
+        }, timeoutDuration);
+    }
+
+    function waitForReceipt(txHash, cb) {
+        let timeoutDuration = 0;
+        if (Contract.network == "local") timeoutDuration = 7000;
+        setTimeout(function() {
+            web3_instance.eth.getTransactionReceipt(txHash, function(error, receipt) {
+                if (error) {
+                    alert(error);
+                } else if (receipt != null) {
+                    cb(receipt);
+                } else {
+                    window.setTimeout(function() {
+                        waitForReceipt(txHash, cb);
+                    }, 250);
+                }
+            });
+        }, timeoutDuration);
+    }
+
+    function timeConverter(UNIX_timestamp) {
+        var date = new Date(UNIX_timestamp * 1000);
+        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        var year = date.getFullYear();
+        var month = months[date.getMonth()];
+        var day = date.getDate();
+        var hour = date.getHours();
+        var min = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+        var sec = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
+        var time = day + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
+        return time;
     }
 
     $(document).ready(function() {
@@ -478,6 +667,7 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
             checkAccount();
             displayMyCommander();
             displayAllCommanders();
+            displayMission();
         });
         $("#create-commander").click(function() {
             createCommander();
@@ -499,6 +689,12 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
         });
         $("#attack").click(function() {
             attack();
+        });
+        $("#change-name").click(function() {
+            changeCommanderName();
+        });
+        $("#start-mission").click(function() {
+            startMission();
         });
     });
 })(Contracts['CrypteriumWars']);

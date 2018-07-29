@@ -19,11 +19,8 @@ body {
     padding-bottom: 10px;
 }
 
-#mycommander-text {
-    text-decoration: underline;
-    float: left;
+#mycommander-name {
     font-size: 28px;
-    padding-left: 150px;
     display: none;
 }
 
@@ -83,7 +80,7 @@ body {
 }
 
 #attack-address {
-    width: 200px;
+    width: 195px;
 }
 
 #attack-amount {
@@ -98,7 +95,25 @@ body {
     display: none;
 }
 
+#changing-name {
+    display:none;
+}
+
+#start-mission {
+    width: 315px;
+}
+
+#started-mission {
+    display: none;
+}
+
 #commander-list-text {
     font-size: 28px;
     margin-top: 0px;
+}
+
+.allcommanders-commander {
+    text-align: left;
+    border:1px solid black;
+    margin-bottom: 15px;
 }

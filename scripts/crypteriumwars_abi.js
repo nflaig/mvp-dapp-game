@@ -40,6 +40,18 @@ var crypteriumWarsABI = [
       {
         "name": "attackReadyTime",
         "type": "uint256"
+      },
+      {
+        "name": "missionLevel",
+        "type": "uint256"
+      },
+      {
+        "name": "missionReadyTime",
+        "type": "uint256"
+      },
+      {
+        "name": "completedSpecialMission",
+        "type": "bool"
       }
     ],
     "payable": false,
@@ -119,9 +131,41 @@ var crypteriumWarsABI = [
         "indexed": true,
         "name": "_owner",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "_id",
+        "type": "uint256"
       }
     ],
     "name": "NewCommander",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "_oldName",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "_newName",
+        "type": "string"
+      },
+      {
+        "indexed": true,
+        "name": "_owner",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "id",
+        "type": "uint256"
+      }
+    ],
+    "name": "ChangeName",
     "type": "event"
   },
   {
@@ -274,6 +318,92 @@ var crypteriumWarsABI = [
       }
     ],
     "name": "DefenderWon",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "_missionLevel",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "_difficultyMultiplier",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "_totalPowerMultiplier",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "_reward",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "name": "_owner",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "_id",
+        "type": "uint256"
+      }
+    ],
+    "name": "MissionSucceeded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "_missionLevel",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "_difficultyMultiplier",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "_totalPowerMultiplier",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "name": "_owner",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "_id",
+        "type": "uint256"
+      }
+    ],
+    "name": "MissionFailed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "_owner",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "_id",
+        "type": "uint256"
+      }
+    ],
+    "name": "SpecialMissionCompleted",
     "type": "event"
   },
   {
@@ -445,6 +575,29 @@ var crypteriumWarsABI = [
     "type": "function"
   },
   {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_id",
+        "type": "uint256"
+      }
+    ],
+    "name": "getMissionDetails",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "constant": false,
     "inputs": [
       {
@@ -453,6 +606,20 @@ var crypteriumWarsABI = [
       }
     ],
     "name": "createCommander",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_newName",
+        "type": "string"
+      }
+    ],
+    "name": "changeCommanderName",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -536,6 +703,33 @@ var crypteriumWarsABI = [
       }
     ],
     "name": "attack",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "startMission",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_commandOne",
+        "type": "uint256"
+      },
+      {
+        "name": "_commandTwo",
+        "type": "bytes8"
+      }
+    ],
+    "name": "startSpecialMission",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
