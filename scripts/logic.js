@@ -89,7 +89,7 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
                                             $("#no-commander").css("display", "none");
                                             $("#commander-name").css("display", "none");
                                             $("#create-commander").css("display", "none");
-                                            $("#mycommander-name").html("Commander " + commanderName);
+                                            $("#mycommander-name").text("Commander " + commanderName);
                                             $("#mycommander-name").css("display", "inline");
                                             $("#mycommander").append(
                                                 `<span>Owner: ${result[0]}</span>
@@ -138,7 +138,7 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
                         if (error) {
                             alert(error);
                         } else {
-                            commanderName = result;
+                            commanderName = $('<div/>').text(result).html();
                         }
                     });
                     let missionReadyTime;
