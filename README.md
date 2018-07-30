@@ -1,12 +1,28 @@
 # Crypterium Wars
 
 Crypterium Wars is a Decentralized Application (Dapp) Game developed on Ethereum.
+It benefits from a lot of features that a blockchain offers, namely, high security,
+censorship resistance and a 100% ownership of the assets in the game by the player.
+Whereas the cost and the delay of each transaction barely affect the game and therefore,
+the advantages of using a blockchain outweigh the disadvantages.
+
+#### About the Game
+
 Each player can create a Commander which is associated with their Ethereum address.
 A Commander is a non-fungible ERC-721 token that is indivisible and unique.
 It is also possible to transfer a Commander to another address which does not already have one.
 After creating a Commander, the player can harvest or buy Crypterium that can be used to produce different units.
 Currently, there are infantry, vehicle and aircraft units each with unique combat stats.
 A player can also attack other Commanders and fight for a certain amount of Crypterium.
+Furthermore, there are missions which require a strong force of units depending on the mission level,
+but the reward increases as well. For really dedicated players, there is a special mission that can only be
+solved with some technical knowledge, but the reward will be worth the effort.
+
+#### Further Improvements
+
+The front-end of the game is currently just functional and can be improved with graphics and animations. For example,
+production animations while building units and battle animations for missions and attacks on other players. The smart
+contract can also be improved by adding new features or increasing the complexity of the current game logic. 
 
 ## Installation
 
