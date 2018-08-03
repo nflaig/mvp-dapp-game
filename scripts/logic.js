@@ -231,6 +231,7 @@ if (typeof(Contracts) === "undefined") var Contracts = {};
                             $("#create-commander-result").css("display", "none");
                             displayMyCommander();
                             displayAllCommanders();
+                            displayMission();
                         } else {
                             $("#commander-name").val("");
                             $("#no-commander").css("display", "block");
