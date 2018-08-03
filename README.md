@@ -22,7 +22,7 @@ solved with some technical knowledge, but the reward will be worth the effort.
 
 The front-end of the game is currently just functional and can be improved with graphics and animations. For example,
 production animations while building units and battle animations for missions and attacks on other players. The smart
-contract can also be improved by adding new features or increasing the complexity of the current game logic. 
+contract can also be improved by adding new features or increasing the complexity of the current game logic.
 
 ## Installation
 
@@ -117,3 +117,7 @@ http://localhost:5000
 
 That's it. Now you can use the front-end to interact with the smart contract on your local blockchain
 and sign transactions with MetaMask.
+
+## License
+
+Code released under the [MIT License](https://github.com/nflaig/mvp-dapp-game/blob/master/LICENSE).
