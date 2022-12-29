@@ -21,6 +21,6 @@
   },
   "homepage": "https://github.com/nflaig/mvp-dapp-game#readme",
   "dependencies": {
-    "truffle-hdwallet-provider": "0.0.5"
+    "truffle-hdwallet-provider": "1.0.17"
   }
 }
